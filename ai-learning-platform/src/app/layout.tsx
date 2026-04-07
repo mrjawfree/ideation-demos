@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "AI Fluency Lab — Learn AI That Actually Works at Work",
     description:
       "A 6-week cohort course that turns non-technical professionals into confident AI users.",
-    url: "https://ai-learning-platform-isle88.vercel.app",
+    url: "https://ai-fluency-lab-preview.vercel.app",
     siteName: "AI Fluency Lab",
     type: "website",
   },
