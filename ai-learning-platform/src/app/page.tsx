@@ -9,127 +9,163 @@ export default function LandingPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
-    // Prototype: show success state.
-    // Production will POST to an API route or email service.
     setSubmitted(true);
   }
 
   return (
     <>
       {/* ─── HERO ─── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-50 via-white to-brand-100">
-        <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32 text-center">
-          <p className="inline-block rounded-full bg-brand-100 px-4 py-1.5 text-sm font-medium text-brand-700 mb-6">
-            Early-bird cohort — limited to 30 seats
+      <section className="bg-surface text-background min-h-[90vh] flex items-center relative overflow-hidden">
+        <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
+          <p className="text-sm font-medium tracking-widest uppercase text-accent mb-8">
+            Early-bird cohort — 30 seats only
           </p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight">
-            Stop treating AI like a search&nbsp;bar.
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-[5.5rem] font-black leading-[0.95] tracking-tight max-w-4xl">
+            Your team doesn&rsquo;t have
+            <br />
+            an AI problem.
+            <br />
+            <span className="relative inline-block">
+              <span className="relative z-10">They have a skills&nbsp;gap.</span>
+              <span
+                className="absolute bottom-1 left-0 w-full h-3 sm:h-4 bg-accent/80 -z-0"
+                aria-hidden="true"
+              />
+            </span>
           </h1>
-          <p className="mt-6 text-lg sm:text-xl text-muted max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-10 text-lg sm:text-xl text-background/70 max-w-2xl leading-relaxed font-sans">
             A 6-week cohort that turns non-technical professionals into
             confident AI users — with live practice, real workflows, and a
             community that keeps you accountable.
           </p>
 
           {/* CTA */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-12">
             {!submitted ? (
-              <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-2">
+              <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-0">
                 <input
                   type="email"
                   required
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+                  className="flex-1 bg-white/10 border border-white/20 px-4 py-3.5 text-sm text-background placeholder:text-background/40 focus:outline-none focus:border-accent"
                 />
                 <button
                   type="submit"
-                  className="rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 transition-colors cursor-pointer whitespace-nowrap"
+                  className="bg-accent text-foreground px-6 py-3.5 text-sm font-bold uppercase tracking-wider hover:bg-accent-dim transition-colors cursor-pointer whitespace-nowrap"
                 >
-                  Get early-bird access
+                  Get early access
                 </button>
               </form>
             ) : (
-              <div className="rounded-lg bg-green-50 border border-green-200 px-6 py-4 text-green-800 font-medium">
-                You&apos;re on the list! We&apos;ll email you when the first cohort opens.
+              <div className="border-l-4 border-accent pl-4 py-2 text-background font-medium">
+                You&apos;re on the list. We&apos;ll email you when the first cohort opens.
               </div>
             )}
+            <p className="mt-4 text-xs text-background/40">
+              No spam. Unsubscribe anytime. First cohort launches Q2&nbsp;2026.
+            </p>
           </div>
-
-          <p className="mt-4 text-xs text-muted">
-            No spam. Unsubscribe anytime. First cohort launches Q2 2026.
-          </p>
         </div>
+
+        {/* Decorative offset element */}
+        <div
+          className="hidden lg:block absolute right-0 top-1/4 w-64 h-80 border border-accent/20"
+          aria-hidden="true"
+        />
       </section>
 
-      {/* ─── PROBLEM ─── */}
-      <section className="bg-white py-20">
+      {/* ─── EDITORIAL PULL-QUOTE (replaces stats grid) ─── */}
+      <section className="bg-background py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            The AI skills gap is real — and it&apos;s costing you
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-8 text-center">
-            <StatCard number="78%" label="of companies use AI, yet only 1% say they're AI-mature" />
-            <StatCard number="59%" label="of leaders report an AI skills gap — even after investing in training" />
-            <StatCard number="$5.5T" label="in economic value lost by 2026 due to AI skills shortages" />
+          <div className="border-l-4 border-accent pl-8 sm:pl-12">
+            <p className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-snug tracking-tight">
+              &ldquo;I taught 40&nbsp;colleagues to use AI.
+              <br />
+              <span className="text-accent-dim">87% are still using it daily.</span>&rdquo;
+            </p>
+            <p className="mt-6 text-muted text-sm uppercase tracking-widest">
+              The result that started everything
+            </p>
           </div>
-          <p className="mt-10 text-center text-muted max-w-2xl mx-auto">
+          <p className="mt-12 text-lg text-muted max-w-2xl leading-relaxed">
             Your company bought the tools. Your LinkedIn feed is full of AI
             takes. But nobody showed your team how to actually <em>use</em> AI
-            in their day-to-day work.
+            in their day-to-day work. That ends here.
           </p>
         </div>
       </section>
 
-      {/* ─── SOCIAL PROOF / FOUNDER STORY ─── */}
-      <section className="bg-surface py-20">
-        <div className="mx-auto max-w-3xl px-6">
-          <h2 className="text-3xl font-bold text-center mb-10">
-            Built from real experience
-          </h2>
-          <blockquote className="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
-            <svg
-              className="absolute top-6 left-6 w-8 h-8 text-brand-100"
-              fill="currentColor"
-              viewBox="0 0 32 32"
-            >
-              <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-            </svg>
-            <p className="text-lg leading-relaxed text-foreground mt-4">
-              I sit in meetings where smart, capable people treat AI like a
-              fancy search bar. They type a question, read the answer, and walk
-              away unimpressed. They&apos;ve never iterated on a prompt, never used
-              AI to build something, never had a real conversation with a model.
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-foreground">
-              So I built them a system — AI-generated lessons, scripts, and
-              decks, fact-checked by humans. The result? Colleagues who&apos;d never
-              touched AI started using it as a real workflow tool. Not a toy. A
-              tool.
-            </p>
-            <footer className="mt-6 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
-                JB
+      {/* ─── FOUNDER STORY ─── */}
+      <section className="bg-surface-light py-24 sm:py-32 relative">
+        {/* Overlapping offset element */}
+        <div
+          className="hidden md:block absolute left-8 top-16 w-48 h-48 border border-foreground/5"
+          aria-hidden="true"
+        />
+        <div className="mx-auto max-w-4xl px-6 grid md:grid-cols-[280px_1fr] gap-12 items-start">
+          {/* Founder photo placeholder */}
+          <div className="relative">
+            <div className="aspect-[3/4] bg-foreground/5 border border-foreground/10 flex items-end justify-center overflow-hidden">
+              <div className="text-center pb-6">
+                <div className="w-20 h-20 rounded-full bg-foreground/10 mx-auto mb-3 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-foreground/30">JB</span>
+                </div>
+                <p className="text-xs text-muted">Jeoffrey&apos;s photo goes here</p>
               </div>
-              <div>
-                <p className="font-semibold text-foreground">Jeoffrey Batangan</p>
-                <p className="text-sm text-muted">Founder, AI Fluency Lab</p>
-              </div>
-            </footer>
-          </blockquote>
+            </div>
+            <div className="mt-4">
+              <p className="font-display font-bold text-lg">Jeoffrey Batangan</p>
+              <p className="text-sm text-muted">Founder, AI Fluency Lab</p>
+            </div>
+          </div>
+
+          {/* Letter-style quote */}
+          <div className="pt-2">
+            <p className="font-display text-2xl sm:text-3xl font-bold italic leading-snug mb-8">
+              A letter from the founder
+            </p>
+            <div className="space-y-5 text-base leading-relaxed text-foreground/80">
+              <p>
+                I sit in meetings where smart, capable people treat AI like a
+                fancy search bar. They type a question, read the answer, and walk
+                away unimpressed.
+              </p>
+              <p>
+                They&apos;ve never iterated on a prompt. Never used AI to build
+                something. Never had a real conversation with a model.
+              </p>
+              <p>
+                So I built them a system — AI-generated lessons, scripts, and
+                decks, fact-checked by humans. The result? Colleagues who&apos;d never
+                touched AI started using it as a real workflow tool.
+              </p>
+              <p className="font-bold text-foreground">
+                Not a toy. A tool.
+              </p>
+              <p>
+                Now I&apos;m packaging that system into a cohort you can join.
+                Six weeks. Real practice. Real results.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ─── WHAT YOU'LL LEARN ─── */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            What you&apos;ll learn in 6 weeks
+      {/* ─── CURRICULUM (numbered timeline) ─── */}
+      <section className="bg-background py-24 sm:py-32">
+        <div className="mx-auto max-w-3xl px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-16">
+            What you&apos;ll learn
+            <br />
+            in 6&nbsp;weeks
           </h2>
-          <div className="grid sm:grid-cols-2 gap-6">
-            <WeekCard
-              week="1-2"
+
+          <div className="space-y-12">
+            <CurriculumItem
+              number="01"
+              weeks="Week 1–2"
               title="Foundations"
               items={[
                 "What AI actually is (and isn't) — no jargon",
@@ -137,8 +173,9 @@ export default function LandingPage() {
                 "How to iterate on prompts like a pro",
               ]}
             />
-            <WeekCard
-              week="3-4"
+            <CurriculumItem
+              number="02"
+              weeks="Week 3–4"
               title="Workflows"
               items={[
                 "AI for writing, research, and analysis",
@@ -146,8 +183,9 @@ export default function LandingPage() {
                 "Build a personal AI toolkit",
               ]}
             />
-            <WeekCard
-              week="5"
+            <CurriculumItem
+              number="03"
+              weeks="Week 5"
               title="Strategy"
               items={[
                 "Evaluate AI tools for your team",
@@ -155,8 +193,9 @@ export default function LandingPage() {
                 "Build a business case for AI adoption",
               ]}
             />
-            <WeekCard
-              week="6"
+            <CurriculumItem
+              number="04"
+              weeks="Week 6"
               title="Capstone"
               items={[
                 "Apply AI to a real project from your job",
@@ -168,25 +207,50 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── WHO IT'S FOR ─── */}
+      <section className="bg-surface text-background py-24 sm:py-32">
+        <div className="mx-auto max-w-4xl px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-16">
+            Is this for you?
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-8">
+            <PersonaCard
+              title="The Ops Manager"
+              description="You've heard 'AI' in every leadership meeting for 18 months. Your team nods along but nobody's actually using it. You need practical skills, not theory."
+            />
+            <PersonaCard
+              title="The SMB Founder"
+              description="Your competitors are getting faster with AI. You know you're falling behind but don't know where to start or who to trust."
+            />
+            <PersonaCard
+              title="The L&D Buyer"
+              description="You bought LinkedIn Learning licenses. Nobody used them. You need something with measurable completion rates that people voluntarily show up for."
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ─── PRICING ─── */}
-      <section className="bg-surface py-20">
-        <div className="mx-auto max-w-lg px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Simple pricing</h2>
-          <p className="text-muted mb-10">
+      <section className="bg-background py-24 sm:py-32">
+        <div className="mx-auto max-w-lg px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-center mb-4">
+            Simple pricing
+          </h2>
+          <p className="text-muted text-center mb-12">
             One cohort. One price. Everything included.
           </p>
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <p className="text-sm font-medium text-brand-600 mb-2">
+          <div className="border-2 border-foreground p-8 sm:p-10">
+            <p className="text-sm font-bold uppercase tracking-widest text-accent-dim mb-4">
               Early-bird price
             </p>
-            <div className="flex items-baseline justify-center gap-1">
-              <span className="text-5xl font-bold text-foreground">$397</span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-display text-6xl font-black">$397</span>
               <span className="text-muted text-sm">/person</span>
             </div>
             <p className="mt-1 text-sm text-muted line-through">$597 after early-bird</p>
 
-            <ul className="mt-8 text-left space-y-3 text-sm">
+            <ul className="mt-10 space-y-3 text-sm">
               {[
                 "6 live weekly sessions (90 min each)",
                 "Hands-on exercises with real AI tools",
@@ -195,20 +259,8 @@ export default function LandingPage() {
                 "Certificate of completion",
                 "30-day post-cohort support",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <svg
-                    className="w-5 h-5 text-green-500 mt-0.5 shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                <li key={item} className="flex items-start gap-3">
+                  <span className="text-accent-dim font-bold mt-px">+</span>
                   {item}
                 </li>
               ))}
@@ -220,73 +272,71 @@ export default function LandingPage() {
                   .querySelector("#signup")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="mt-8 w-full rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 transition-colors cursor-pointer"
+              className="mt-10 w-full bg-foreground text-background px-6 py-4 text-sm font-bold uppercase tracking-wider hover:bg-foreground/90 transition-colors cursor-pointer"
             >
               Reserve your seat
             </button>
 
-            <p className="mt-4 text-xs text-muted">
-              Ask your employer — most L&D budgets cover this.
+            <p className="mt-4 text-xs text-muted text-center">
+              Ask your employer — most L&amp;D budgets cover this.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ─── WHO IT'S FOR ─── */}
-      <section className="bg-white py-20">
+      {/* ─── TESTIMONIAL (full-bleed blockquote) ─── */}
+      <section className="bg-surface-light py-24 sm:py-32 relative overflow-hidden">
+        {/* Offset decorative block */}
+        <div
+          className="hidden md:block absolute -right-12 top-1/3 w-72 h-40 bg-accent/10"
+          aria-hidden="true"
+        />
         <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Is this for you?
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-8">
-            <PersonaCard
-              emoji="📋"
-              title="The Ops Manager"
-              description="You've heard 'AI' in every leadership meeting for 18 months. Your team nods along but nobody's actually using it. You need practical skills, not theory."
-            />
-            <PersonaCard
-              emoji="🚀"
-              title="The SMB Founder"
-              description="Your competitors are getting faster with AI. You know you're falling behind but don't know where to start or who to trust."
-            />
-            <PersonaCard
-              emoji="📊"
-              title="The L&D Buyer"
-              description="You bought LinkedIn Learning licenses. Nobody used them. You need something with measurable completion rates that people voluntarily show up for."
-            />
-          </div>
+          <blockquote className="md:pl-16 relative">
+            <span className="font-display text-[8rem] leading-none text-foreground/5 absolute -top-8 -left-4 md:left-0 select-none" aria-hidden="true">
+              &ldquo;
+            </span>
+            <p className="font-display text-2xl sm:text-3xl lg:text-4xl italic leading-snug font-bold relative z-10">
+              I went from asking ChatGPT trivia questions to building an
+              automated weekly report that saves me 4 hours every Friday.
+            </p>
+            <footer className="mt-8">
+              <p className="font-bold">Early pilot participant</p>
+              <p className="text-sm text-muted">Operations Manager, Fortune 500</p>
+            </footer>
+          </blockquote>
         </div>
       </section>
 
       {/* ─── FINAL CTA ─── */}
-      <section id="signup" className="bg-gradient-to-br from-brand-600 to-brand-700 py-20">
-        <div className="mx-auto max-w-2xl px-6 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to become AI-fluent?
+      <section id="signup" className="bg-surface text-background py-24 sm:py-32">
+        <div className="mx-auto max-w-2xl px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+            Ready to become AI&#8209;fluent?
           </h2>
-          <p className="text-brand-100 mb-8">
+          <p className="text-background/60 mb-10">
             Join the waitlist for the first cohort. Early-bird members get $200
             off and priority access.
           </p>
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="flex max-w-md mx-auto gap-2">
+            <form onSubmit={handleSubmit} className="flex max-w-md gap-0">
               <input
                 type="email"
                 required
                 placeholder="you@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-white"
+                className="flex-1 bg-white/10 border border-white/20 px-4 py-3.5 text-sm text-background placeholder:text-background/40 focus:outline-none focus:border-accent"
               />
               <button
                 type="submit"
-                className="rounded-lg bg-white text-brand-700 px-6 py-3 text-sm font-semibold hover:bg-brand-50 transition-colors cursor-pointer whitespace-nowrap"
+                className="bg-accent text-foreground px-6 py-3.5 text-sm font-bold uppercase tracking-wider hover:bg-accent-dim transition-colors cursor-pointer whitespace-nowrap"
               >
                 Join waitlist
               </button>
             </form>
           ) : (
-            <div className="rounded-lg bg-white/10 px-6 py-4 text-white font-medium inline-block">
+            <div className="border-l-4 border-accent pl-4 py-2 text-background font-medium">
               You&apos;re on the list! We&apos;ll be in touch soon.
             </div>
           )}
@@ -294,7 +344,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="bg-gray-900 text-gray-400 py-8">
+      <footer className="bg-foreground text-background/40 py-8">
         <div className="mx-auto max-w-4xl px-6 text-center text-sm">
           <p>AI Fluency Lab is a product of Isle88 LLC.</p>
           <p className="mt-2">
@@ -308,56 +358,51 @@ export default function LandingPage() {
 
 /* ─── Sub-components ─── */
 
-function StatCard({ number, label }: { number: string; label: string }) {
-  return (
-    <div>
-      <p className="text-4xl font-bold text-brand-600">{number}</p>
-      <p className="mt-2 text-sm text-muted">{label}</p>
-    </div>
-  );
-}
-
-function WeekCard({
-  week,
+function CurriculumItem({
+  number,
+  weeks,
   title,
   items,
 }: {
-  week: string;
+  number: string;
+  weeks: string;
   title: string;
   items: string[];
 }) {
   return (
-    <div className="rounded-xl border border-gray-100 bg-surface p-6">
-      <p className="text-xs font-semibold text-brand-600 uppercase tracking-wider">
-        Week {week}
-      </p>
-      <h3 className="mt-1 text-lg font-bold text-foreground">{title}</h3>
-      <ul className="mt-3 space-y-2 text-sm text-muted">
-        {items.map((item) => (
-          <li key={item} className="flex items-start gap-2">
-            <span className="text-brand-600 mt-0.5">-</span>
-            {item}
-          </li>
-        ))}
-      </ul>
+    <div className="grid grid-cols-[auto_1fr] gap-6 sm:gap-8">
+      <div className="font-display text-5xl sm:text-6xl font-black text-foreground/10 leading-none pt-1">
+        {number}
+      </div>
+      <div>
+        <p className="text-xs font-bold uppercase tracking-widest text-accent-dim">
+          {weeks}
+        </p>
+        <h3 className="font-display text-xl sm:text-2xl font-bold mt-1">{title}</h3>
+        <ul className="mt-3 space-y-2 text-sm text-muted">
+          {items.map((item) => (
+            <li key={item} className="flex items-start gap-2">
+              <span className="text-foreground/30 mt-0.5">&mdash;</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
 
 function PersonaCard({
-  emoji,
   title,
   description,
 }: {
-  emoji: string;
   title: string;
   description: string;
 }) {
   return (
-    <div className="text-center">
-      <span className="text-4xl">{emoji}</span>
-      <h3 className="mt-3 text-lg font-bold text-foreground">{title}</h3>
-      <p className="mt-2 text-sm text-muted leading-relaxed">{description}</p>
+    <div className="border-t border-background/20 pt-6">
+      <h3 className="font-display text-lg font-bold text-background">{title}</h3>
+      <p className="mt-3 text-sm text-background/60 leading-relaxed">{description}</p>
     </div>
   );
 }
