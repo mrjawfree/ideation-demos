@@ -15,14 +15,22 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "AI Fluency Lab — Practical AI Training for Non-Technical Professionals",
+  title: "AI Fluency Lab — Learn AI That Actually Works at Work",
   description:
-    "Stop treating AI like a search bar. Join a 6-week cohort that turns non-technical professionals into confident AI users. Early-bird pricing available.",
+    "A 6-week cohort course that turns non-technical professionals into confident AI users. Practical, not theoretical.",
   openGraph: {
-    title: "AI Fluency Lab — Practical AI Training for Professionals",
+    title: "AI Fluency Lab — Learn AI That Actually Works at Work",
     description:
-      "6-week cohort-based AI training. Go from AI-curious to AI-confident.",
+      "A 6-week cohort course that turns non-technical professionals into confident AI users.",
+    url: "https://ai-learning-platform-isle88.vercel.app",
+    siteName: "AI Fluency Lab",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Fluency Lab",
+    description:
+      "A 6-week cohort course that turns non-technical professionals into confident AI users.",
   },
 };
 
