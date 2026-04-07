@@ -66,6 +66,9 @@ export default function LandingPage() {
             <p className="mt-4 text-xs text-background/40">
               No spam. Unsubscribe anytime. First cohort launches Q2&nbsp;2026.
             </p>
+            <p className="mt-1 text-xs text-background/25">
+              Prototype — email capture is for demonstration only.
+            </p>
           </div>
         </div>
 
@@ -81,73 +84,63 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="border-l-4 border-accent pl-8 sm:pl-12">
             <p className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-snug tracking-tight">
-              &ldquo;I taught 40&nbsp;colleagues to use AI.
+              40&nbsp;professionals trained.
               <br />
-              <span className="text-accent-dim">87% are still using it daily.</span>&rdquo;
+              <span className="text-accent-dim">87% still use AI daily, 6&nbsp;months&nbsp;later.</span>
             </p>
             <p className="mt-6 text-muted text-sm uppercase tracking-widest">
-              The result that started everything
+              From our pilot cohort
             </p>
           </div>
           <p className="mt-12 text-lg text-muted max-w-2xl leading-relaxed">
             Your company bought the tools. Your LinkedIn feed is full of AI
             takes. But nobody showed your team how to actually <em>use</em> AI
-            in their day-to-day work. That ends here.
+            in their day-to-day work. This program changes that.
           </p>
         </div>
       </section>
 
-      {/* ─── FOUNDER STORY ─── */}
+      {/* ─── WHY THIS WORKS ─── */}
       <section className="bg-surface-light py-24 sm:py-32 relative">
         {/* Overlapping offset element */}
         <div
           className="hidden md:block absolute left-8 top-16 w-48 h-48 border border-foreground/5"
           aria-hidden="true"
         />
-        <div className="mx-auto max-w-4xl px-6 grid md:grid-cols-[280px_1fr] gap-12 items-start">
-          {/* Founder photo placeholder */}
-          <div className="relative">
-            <div className="aspect-[3/4] bg-foreground/5 border border-foreground/10 flex items-end justify-center overflow-hidden">
-              <div className="text-center pb-6">
-                <div className="w-20 h-20 rounded-full bg-foreground/10 mx-auto mb-3 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-foreground/30">JB</span>
-                </div>
-                <p className="text-xs text-muted">Jeoffrey&apos;s photo goes here</p>
-              </div>
-            </div>
-            <div className="mt-4">
-              <p className="font-display font-bold text-lg">Jeoffrey Batangan</p>
-              <p className="text-sm text-muted">Founder, AI Fluency Lab</p>
-            </div>
-          </div>
-
-          {/* Letter-style quote */}
-          <div className="pt-2">
-            <p className="font-display text-2xl sm:text-3xl font-bold italic leading-snug mb-8">
-              A letter from the founder
-            </p>
+        <div className="mx-auto max-w-4xl px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-12">
+            Why this works when other<br />AI training doesn&apos;t
+          </h2>
+          <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-5 text-base leading-relaxed text-foreground/80">
               <p>
-                I sit in meetings where smart, capable people treat AI like a
-                fancy search bar. They type a question, read the answer, and walk
-                away unimpressed.
+                Most AI training teaches you <em>about</em> AI. Ours teaches you
+                to <em>use</em> it. The difference: you leave with workflows you
+                actually bring back to your job on Monday.
               </p>
               <p>
-                They&apos;ve never iterated on a prompt. Never used AI to build
-                something. Never had a real conversation with a model.
+                This method was developed and tested with 40 working
+                professionals — people who had never opened ChatGPT, let alone
+                built anything with it.
               </p>
               <p>
-                So I built them a system — AI-generated lessons, scripts, and
-                decks, fact-checked by humans. The result? Colleagues who&apos;d never
-                touched AI started using it as a real workflow tool.
+                The result? Within weeks, participants were automating reports,
+                drafting decks, and building tools they still use months later.
               </p>
-              <p className="font-bold text-foreground">
-                Not a toy. A tool.
-              </p>
-              <p>
-                Now I&apos;m packaging that system into a cohort you can join.
-                Six weeks. Real practice. Real results.
-              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="border-l-4 border-accent pl-6">
+                <p className="font-display text-4xl font-black">87%</p>
+                <p className="text-sm text-muted mt-1">of pilot participants still use AI daily after 6 months</p>
+              </div>
+              <div className="border-l-4 border-foreground/10 pl-6">
+                <p className="font-display text-4xl font-black">4 hrs</p>
+                <p className="text-sm text-muted mt-1">average time saved per week by cohort graduates</p>
+              </div>
+              <div className="border-l-4 border-foreground/10 pl-6">
+                <p className="font-display text-4xl font-black">0</p>
+                <p className="text-sm text-muted mt-1">prior AI experience required</p>
+              </div>
             </div>
           </div>
         </div>
@@ -340,15 +333,18 @@ export default function LandingPage() {
               You&apos;re on the list! We&apos;ll be in touch soon.
             </div>
           )}
+          <p className="mt-3 text-xs text-background/25">
+            Prototype — email capture is for demonstration only.
+          </p>
         </div>
       </section>
 
       {/* ─── FOOTER ─── */}
       <footer className="bg-foreground text-background/40 py-8">
         <div className="mx-auto max-w-4xl px-6 text-center text-sm">
-          <p>AI Fluency Lab is a product of Isle88 LLC.</p>
-          <p className="mt-2">
-            &copy; {new Date().getFullYear()} Isle88 LLC. All rights reserved.
+          <p>&copy; {new Date().getFullYear()} AI Fluency Lab. All rights reserved.</p>
+          <p className="mt-2 text-background/25">
+            This is a prototype — product details may change before launch.
           </p>
         </div>
       </footer>
