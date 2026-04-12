@@ -1,0 +1,4 @@
+{
+  "outputDirectory": "livingstyleguide/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
