@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpiceScale — BBQ Dry Rub Batch Calculator</title>
+  <meta name="description" content="Scale your BBQ dry rub recipes without ruining the flavor. SpiceScale adjusts spices non-linearly so your 10x batch tastes like your 1x." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">BBQ Dry Rub Calculator</div>
+      <h1>Scale your rub.<br/><span class="highlight">Keep the flavor.</span></h1>
+      <p class="hero-sub">Most batch calculators just multiply everything by the same number. But spices don't work that way — salt, cayenne, and dried chilies overpower at scale. <strong>SpiceScale adjusts each ingredient non-linearly</strong> so your 10x batch tastes like your 1x.</p>
+    </div>
+  </header>
+
+  <!-- Calculator -->
+  <section class="calculator" id="calculator">
+    <div class="container">
+      <div class="calc-header">
+        <h2>Classic BBQ Dry Rub</h2>
+        <p class="calc-subtitle">Drag the slider to scale. Watch how SpiceScale adjusts intense ingredients differently.</p>
+      </div>
+
+      <div class="scale-control">
+        <label for="scale-slider">Batch Size</label>
+        <div class="slider-row">
+          <span class="scale-label">1x</span>
+          <input type="range" id="scale-slider" min="1" max="10" step="0.5" value="1" />
+          <span class="scale-label">10x</span>
+        </div>
+        <div class="scale-value" id="scale-value">1x batch</div>
+      </div>
+
+      <div class="comparison-header">
+        <div class="col-label">Ingredient</div>
+        <div class="col-label">Base (1x)</div>
+        <div class="col-label naive-label">Naive ×</div>
+        <div class="col-label smart-label">SpiceScale</div>
+      </div>
+
+      <div id="ingredients-list" class="ingredients-list">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <span class="dot dot-linear"></span> Scales linearly (safe to multiply)
+        </div>
+        <div class="legend-item">
+          <span class="dot dot-sublinear"></span> Scales sub-linearly (intense — needs reduction)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Section -->
+  <section class="why-section">
+    <div class="container">
+      <h2>Why does this matter?</h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">🧂</div>
+          <h3>Salt overpowers</h3>
+          <p>At 5x, linear salt makes your rub inedible. SpiceScale uses a logarithmic curve to keep it balanced.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🌶️</div>
+          <h3>Heat compounds</h3>
+          <p>Cayenne and dried chilies become exponentially hotter in large batches. We taper them with a power curve.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">📐</div>
+          <h3>Sugar & base scale flat</h3>
+          <p>Brown sugar, paprika, and garlic powder are forgiving — they scale linearly. We leave those alone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Email Capture -->
+  <section class="cta-section" id="signup">
+    <div class="container">
+      <div class="cta-card">
+        <h2>Want this for all your recipes?</h2>
+        <p>We're building the full SpiceScale app — marinades, sauces, brines, and more. Drop your email to get early access.</p>
+        <form id="signup-form" class="signup-form">
+          <input type="email" id="email-input" placeholder="pitmaster@example.com" required autocomplete="email" />
+          <button type="submit">Get Early Access</button>
+        </form>
+        <p class="form-note">No spam. Just a heads up when we launch.</p>
+        <div id="signup-success" class="signup-success" hidden>
+          <p>🔥 You're on the list! We'll email you when SpiceScale is ready.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 SpiceScale. Made for pitmasters who scale.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
