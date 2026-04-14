@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SpiceScale — BBQ Dry Rub Batch Calculator</title>
-  <meta name="description" content="Scale your BBQ dry rub recipes without ruining the flavor. SpiceScale adjusts spices non-linearly so your 10x batch tastes like your 1x." />
+  <title>SpiceScale — Recipe Batch Calculator</title>
+  <meta name="description" content="Scale your recipes without ruining the flavor. SpiceScale adjusts spices non-linearly so your 10x batch tastes like your 1x." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
@@ -14,38 +14,77 @@
   <!-- Hero -->
   <header class="hero">
     <div class="container">
-      <div class="hero-badge">BBQ Dry Rub Calculator</div>
-      <h1>Scale your rub.<br/><span class="highlight">Keep the flavor.</span></h1>
-      <p class="hero-sub">Most batch calculators just multiply everything by the same number. But spices don't work that way — salt, cayenne, and dried chilies overpower at scale. <strong>SpiceScale adjusts each ingredient non-linearly</strong> so your 10x batch tastes like your 1x.</p>
+      <div class="hero-badge">Spice &amp; Sauce Batch Calculator</div>
+      <h1>Scale your recipe.<br/><span class="highlight">Keep the flavor.</span></h1>
+      <p class="hero-sub">Most batch calculators just multiply everything by the same number. But spices don't work that way — salt, cayenne, and soy sauce overpower at scale. <strong>SpiceScale adjusts each ingredient non-linearly</strong> so your 10x batch tastes like your 1x.</p>
     </div>
   </header>
 
   <!-- Calculator -->
   <section class="calculator" id="calculator">
     <div class="container">
+
+      <!-- Recipe Picker -->
+      <div class="recipe-picker" role="tablist" aria-label="Select a recipe">
+        <button class="recipe-tab active" data-recipe="bbq-dry-rub" role="tab" aria-selected="true">BBQ Dry Rub</button>
+        <button class="recipe-tab" data-recipe="hot-sauce" role="tab" aria-selected="false">Hot Sauce</button>
+        <button class="recipe-tab" data-recipe="bbq-sauce" role="tab" aria-selected="false">BBQ Sauce</button>
+        <button class="recipe-tab" data-recipe="marinade" role="tab" aria-selected="false">Marinade</button>
+        <button class="recipe-tab custom-tab" data-recipe="custom" role="tab" aria-selected="false">+ Custom</button>
+      </div>
+
       <div class="calc-header">
-        <h2>Classic BBQ Dry Rub</h2>
+        <h2 id="recipe-title">Classic BBQ Dry Rub</h2>
         <p class="calc-subtitle">Drag the slider to scale. Watch how SpiceScale adjusts intense ingredients differently.</p>
+      </div>
+
+      <!-- Custom Recipe Builder (hidden by default) -->
+      <div class="custom-builder" id="custom-builder" hidden>
+        <div class="custom-builder-header">
+          <input
+            type="text"
+            id="custom-name"
+            placeholder="Name your recipe..."
+            class="recipe-name-input"
+            value="My Recipe"
+            aria-label="Recipe name"
+          />
+          <button type="button" id="add-ingredient-btn" class="add-ingredient-btn">+ Add Ingredient</button>
+        </div>
+        <div class="custom-col-labels" aria-hidden="true">
+          <span>Ingredient</span>
+          <span>Amount</span>
+          <span>Unit</span>
+          <span>Type</span>
+          <span></span>
+        </div>
+        <div id="custom-ingredients-list" class="custom-ingredients-list">
+          <div class="custom-empty">No ingredients yet. Click &ldquo;+ Add Ingredient&rdquo; to start.</div>
+        </div>
+        <p class="type-hint">
+          <span class="dot dot-linear"></span> <strong>Base</strong> = scales linearly &nbsp;&nbsp;
+          <span class="dot dot-sublinear"></span> <strong>Intense</strong> = sub-linear (salt, heat, strong spices)
+        </p>
       </div>
 
       <div class="scale-control">
         <label for="scale-slider">Batch Size</label>
         <div class="slider-row">
           <span class="scale-label">1x</span>
-          <input type="range" id="scale-slider" min="1" max="10" step="0.5" value="1" />
+          <input type="range" id="scale-slider" min="1" max="10" step="0.5" value="1" aria-label="Batch size multiplier" />
           <span class="scale-label">10x</span>
         </div>
         <div class="scale-value" id="scale-value">1x batch</div>
       </div>
 
-      <div class="comparison-header">
+      <div class="comparison-header" aria-hidden="true">
         <div class="col-label">Ingredient</div>
         <div class="col-label">Base (1x)</div>
         <div class="col-label naive-label">Naive ×</div>
         <div class="col-label smart-label">SpiceScale</div>
       </div>
 
-      <div id="ingredients-list" class="ingredients-list">
+      <div id="ingredients-list" class="ingredients-list" role="list" aria-label="Scaled ingredients">
         <!-- Rendered by JS -->
       </div>
 
@@ -68,17 +107,17 @@
         <div class="why-card">
           <div class="why-icon">🧂</div>
           <h3>Salt overpowers</h3>
-          <p>At 5x, linear salt makes your rub inedible. SpiceScale uses a logarithmic curve to keep it balanced.</p>
+          <p>At 5x, linear salt makes your rub or sauce inedible. SpiceScale uses a power curve to keep it balanced.</p>
         </div>
         <div class="why-card">
           <div class="why-icon">🌶️</div>
           <h3>Heat compounds</h3>
-          <p>Cayenne and dried chilies become exponentially hotter in large batches. We taper them with a power curve.</p>
+          <p>Cayenne and dried chilies become exponentially hotter in large batches. We taper them automatically.</p>
         </div>
         <div class="why-card">
           <div class="why-icon">📐</div>
-          <h3>Sugar & base scale flat</h3>
-          <p>Brown sugar, paprika, and garlic powder are forgiving — they scale linearly. We leave those alone.</p>
+          <h3>Base ingredients scale flat</h3>
+          <p>Brown sugar, vinegar, and oils are forgiving — they scale linearly. We leave those alone.</p>
         </div>
       </div>
     </div>
@@ -91,7 +130,7 @@
         <h2>Want this for all your recipes?</h2>
         <p>We're building the full SpiceScale app — marinades, sauces, brines, and more. Drop your email to get early access.</p>
         <form id="signup-form" class="signup-form">
-          <input type="email" id="email-input" placeholder="pitmaster@example.com" required autocomplete="email" />
+          <input type="email" id="email-input" placeholder="pitmaster@example.com" required autocomplete="email" aria-label="Email address" />
           <button type="submit">Get Early Access</button>
         </form>
         <p class="form-note">No spam. Just a heads up when we launch.</p>
@@ -105,7 +144,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 SpiceScale. Made for pitmasters who scale.</p>
+      <p>&copy; 2026 SpiceScale. Made for cooks who scale.</p>
     </div>
   </footer>
 
