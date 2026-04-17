@@ -1,0 +1,21 @@
+# Environment variables (never commit)
+.env
+.env*
+.env.local
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.next/
+out/
+
+# OS
+.DS_Store
+
+# Editor
+.idea
+.vscode/*
+!.vscode/extensions.json
