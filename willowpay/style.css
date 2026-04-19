@@ -36,11 +36,7 @@ img { max-width: 100%; display: block; }
   font-family: 'DM Serif Display', serif;
   font-size: 1.5rem;
   color: #2d6a4f;
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
-.logo-icon { font-size: 1.3rem; }
 .nav-cta {
   background: #2d6a4f;
   color: #fff;
@@ -192,10 +188,6 @@ img { max-width: 100%; display: block; }
   border: 1px solid #e8e8e0;
   border-radius: 16px;
   padding: 36px 32px;
-}
-.benefit-icon {
-  font-size: 2rem;
-  margin-bottom: 16px;
 }
 .benefit-card h3 {
   font-size: 1.1rem;
