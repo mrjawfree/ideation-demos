@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#f97316" />
 </head>
 <body>
   <!-- Hero -->
@@ -119,6 +121,25 @@
           <h3>Base ingredients scale flat</h3>
           <p>Brown sugar, vinegar, and oils are forgiving — they scale linearly. We leave those alone.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notification Settings -->
+  <section class="notification-settings" id="notification-settings" hidden>
+    <div class="container">
+      <div class="notification-card">
+        <div class="notification-header">
+          <div>
+            <h3>Recipe Reminders</h3>
+            <p class="notification-desc">Get a nudge when you haven't cooked a saved recipe in a while.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="push-toggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p class="notification-status" id="push-status"></p>
       </div>
     </div>
   </section>
