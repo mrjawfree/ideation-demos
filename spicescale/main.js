@@ -1,3 +1,17 @@
+import {
+  isPushSupported,
+  getPermissionState,
+  getCurrentSubscription,
+  subscribeToPush,
+  unsubscribeFromPush,
+  isOptedIn
+} from './pushNotifications.js'
+
+// ── Service Worker Registration ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+}
+
 // ── Pre-loaded Recipes ──
 const RECIPES = {
   'bbq-dry-rub': {
@@ -323,3 +337,64 @@ form.addEventListener('submit', (e) => {
   form.hidden = true
   successMsg.hidden = false
 })
+
+// ── Push Notification Settings ──
+async function initPushSettings() {
+  if (!isPushSupported()) return
+
+  const section = document.getElementById('notification-settings')
+  const toggle = document.getElementById('push-toggle')
+  const statusEl = document.getElementById('push-status')
+  section.hidden = false
+
+  async function updateUI() {
+    const permission = await getPermissionState()
+    const subscription = await getCurrentSubscription()
+
+    if (permission === 'denied') {
+      toggle.disabled = true
+      toggle.checked = false
+      statusEl.textContent = 'Notifications blocked in browser settings.'
+      return
+    }
+
+    toggle.checked = !!subscription && isOptedIn()
+    if (subscription && isOptedIn()) {
+      statusEl.textContent = 'You’ll get a reminder when saved recipes go stale.'
+    } else {
+      statusEl.textContent = 'Enable to get weekly recipe reminders.'
+    }
+  }
+
+  toggle.addEventListener('change', async () => {
+    toggle.disabled = true
+    statusEl.textContent = 'Updating...'
+    try {
+      if (toggle.checked) {
+        const sub = await subscribeToPush()
+        if (!sub) {
+          toggle.checked = false
+        }
+      } else {
+        await unsubscribeFromPush()
+      }
+    } catch (err) {
+      console.error('Push toggle error:', err)
+      toggle.checked = false
+    }
+    toggle.disabled = false
+    await updateUI()
+  })
+
+  await updateUI()
+}
+
+initPushSettings()
+
+// ── Deep Link: ?recipe=<id> ──
+const params = new URLSearchParams(window.location.search)
+const recipeParam = params.get('recipe')
+if (recipeParam && (RECIPES[recipeParam] || recipeParam === 'custom')) {
+  setActiveRecipe(recipeParam)
+  document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' })
+}
