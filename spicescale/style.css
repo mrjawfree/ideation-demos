@@ -36,6 +36,28 @@ body {
 
 a { color: var(--accent); }
 
+/* ── Hero Nav ── */
+.hero-nav {
+  text-align: right;
+  margin-bottom: -40px;
+  padding-top: 8px;
+}
+
+.hero-nav-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid rgba(232, 93, 42, 0.3);
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.hero-nav-link:hover {
+  background: rgba(232, 93, 42, 0.1);
+}
+
 /* ── Hero ── */
 .hero {
   padding: 80px 0 60px;

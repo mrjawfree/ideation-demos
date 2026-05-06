@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpiceScale — Weekly Meal Planner</title>
+  <meta name="description" content="Plan your weekly meals around the spices you already own. SpiceScale suggests recipes that match your spice rack." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/meal-planner.css" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#f97316" />
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="mp-nav">
+    <div class="container">
+      <a href="/" class="mp-nav-brand">SpiceScale</a>
+      <span class="mp-nav-title">Weekly Meal Planner</span>
+    </div>
+  </nav>
+
+  <main class="mp-main">
+    <div class="container">
+
+      <!-- Week Navigation -->
+      <div class="week-nav">
+        <button id="prev-week" class="week-btn" aria-label="Previous week">&larr;</button>
+        <h2 id="week-label" class="week-label">This Week</h2>
+        <button id="next-week" class="week-btn" aria-label="Next week">&rarr;</button>
+      </div>
+
+      <!-- Spice Inventory -->
+      <section class="spice-inventory" id="spice-inventory">
+        <div class="section-header">
+          <h3>My Spice Rack</h3>
+          <div class="spice-add-row">
+            <input type="text" id="spice-input" placeholder="Add a spice..." aria-label="Add spice" />
+            <button id="add-spice-btn" class="btn-accent">+ Add</button>
+          </div>
+        </div>
+        <div id="spice-tags" class="spice-tags">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- Weekly Grid -->
+      <section class="meal-grid-section">
+        <div class="meal-grid" id="meal-grid">
+          <!-- Rendered by JS: 7 days × 3 meals -->
+        </div>
+      </section>
+
+      <!-- Shopping List -->
+      <section class="shopping-list-section" id="shopping-section">
+        <div class="section-header">
+          <h3>Shopping List</h3>
+          <button id="copy-list-btn" class="btn-outline" aria-label="Copy shopping list">Copy</button>
+        </div>
+        <div id="shopping-list" class="shopping-list">
+          <p class="empty-state">Plan some meals to see missing spices here.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Meal Picker Modal -->
+  <div class="modal-overlay" id="meal-modal" hidden>
+    <div class="modal" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Meal</h3>
+        <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="meal-search" class="meal-search" placeholder="Search recipes or type a custom meal..." aria-label="Search meals" />
+        <div class="modal-actions">
+          <button id="suggest-btn" class="btn-accent">Suggest a Meal</button>
+        </div>
+        <div id="recipe-results" class="recipe-results">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/meal-planner.js"></script>
+</body>
+</html>
