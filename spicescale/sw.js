@@ -70,8 +70,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-192.png',
+    icon: '/icons/icon-192.svg',
+    badge: '/icons/icon-192.svg',
     tag: 'spicescale-reminder',
     renotify: true,
     data: { recipeId: data.recipeId, url: data.url || '/' }
