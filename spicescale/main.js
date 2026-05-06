@@ -6,6 +6,17 @@ import {
   unsubscribeFromPush,
   isOptedIn
 } from './pushNotifications.js'
+import {
+  saveRecipeOffline,
+  getAllRecipesOffline,
+  enqueueWrite
+} from './offlineStore.js'
+import {
+  initSyncManager,
+  onSyncStatusChange,
+  isOnline,
+  flushWriteQueue
+} from './syncManager.js'
 
 // ── Service Worker Registration ──
 if ('serviceWorker' in navigator) {
@@ -398,3 +409,86 @@ if (recipeParam && (RECIPES[recipeParam] || recipeParam === 'custom')) {
   setActiveRecipe(recipeParam)
   document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' })
 }
+
+// ── Offline Status Indicator ──
+function initOfflineIndicator() {
+  const indicator = document.getElementById('offline-indicator')
+  if (!indicator) return
+
+  function updateIndicator() {
+    if (navigator.onLine) {
+      indicator.classList.remove('visible')
+      indicator.setAttribute('aria-hidden', 'true')
+    } else {
+      indicator.classList.add('visible')
+      indicator.setAttribute('aria-hidden', 'false')
+    }
+  }
+
+  window.addEventListener('online', updateIndicator)
+  window.addEventListener('offline', updateIndicator)
+  updateIndicator()
+
+  onSyncStatusChange((status) => {
+    const text = indicator.querySelector('.offline-text')
+    if (!text) return
+    switch (status) {
+      case 'syncing':
+        text.textContent = 'Syncing changes...'
+        indicator.classList.add('visible', 'syncing')
+        indicator.setAttribute('aria-hidden', 'false')
+        break
+      case 'synced':
+        text.textContent = 'All changes synced'
+        indicator.classList.add('visible', 'synced')
+        indicator.setAttribute('aria-hidden', 'false')
+        setTimeout(() => {
+          indicator.classList.remove('visible', 'synced', 'syncing')
+          indicator.setAttribute('aria-hidden', 'true')
+        }, 2000)
+        break
+      case 'error':
+        text.textContent = 'Sync failed — will retry when online'
+        indicator.classList.add('visible')
+        indicator.classList.remove('syncing', 'synced')
+        indicator.setAttribute('aria-hidden', 'false')
+        break
+      case 'offline':
+        text.textContent = 'Offline — recipes available locally'
+        indicator.classList.add('visible')
+        indicator.classList.remove('syncing', 'synced')
+        indicator.setAttribute('aria-hidden', 'false')
+        break
+      case 'online':
+        updateIndicator()
+        break
+    }
+  })
+}
+
+// ── Offline Recipe Persistence ──
+async function persistRecipesOffline() {
+  for (const [id, recipe] of Object.entries(RECIPES)) {
+    await saveRecipeOffline({ id, ...recipe })
+  }
+  const customRecipes = JSON.parse(localStorage.getItem('spicescale_custom_recipes') || '[]')
+  for (const recipe of customRecipes) {
+    await saveRecipeOffline(recipe)
+  }
+}
+
+async function saveCustomRecipeWithQueue() {
+  const recipe = {
+    id: 'custom-' + Date.now(),
+    name: customName,
+    ingredients: [...customIngredients]
+  }
+  await saveRecipeOffline(recipe)
+  await enqueueWrite({ type: 'save_recipe', data: recipe })
+  if (navigator.onLine) flushWriteQueue()
+}
+
+// ── Init Offline Support ──
+initSyncManager()
+initOfflineIndicator()
+persistRecipesOffline()
