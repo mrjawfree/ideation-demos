@@ -52,10 +52,22 @@ export async function unsubscribeFromPush() {
     await subscription.unsubscribe()
   }
   localStorage.setItem('spicescale_push_enabled', 'false')
+  localStorage.removeItem('spicescale_notif_types')
 }
 
 export function isOptedIn() {
   return localStorage.getItem('spicescale_push_enabled') === 'true'
+}
+
+export function getNotificationPreferences() {
+  const stored = localStorage.getItem('spicescale_notif_types')
+  if (stored) return JSON.parse(stored)
+  return { daily_reminder: true, weekly_meal_plan: true }
+}
+
+export function setNotificationPreferences(prefs) {
+  localStorage.setItem('spicescale_notif_types', JSON.stringify(prefs))
+  syncPreferencesToServer(prefs)
 }
 
 async function saveSubscriptionToServer(subscription) {
@@ -63,6 +75,7 @@ async function saveSubscriptionToServer(subscription) {
 
   const keys = subscription.toJSON()
   const userId = localStorage.getItem('spicescale_email') || 'anonymous'
+  const prefs = getNotificationPreferences()
 
   await fetch(`${SUPABASE_URL}/rest/v1/push_subscriptions`, {
     method: 'POST',
@@ -76,7 +89,9 @@ async function saveSubscriptionToServer(subscription) {
       user_id: userId,
       endpoint: keys.endpoint,
       p256dh: keys.keys.p256dh,
-      auth: keys.keys.auth
+      auth: keys.keys.auth,
+      daily_reminder: prefs.daily_reminder,
+      weekly_meal_plan: prefs.weekly_meal_plan
     })
   })
 }
@@ -91,5 +106,26 @@ async function removeSubscriptionFromServer(subscription) {
       'apikey': SUPABASE_ANON_KEY,
       'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
     }
+  })
+}
+
+async function syncPreferencesToServer(prefs) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return
+
+  const subscription = await getCurrentSubscription()
+  if (!subscription) return
+
+  const endpoint = subscription.endpoint
+  await fetch(`${SUPABASE_URL}/rest/v1/push_subscriptions?endpoint=eq.${encodeURIComponent(endpoint)}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+    },
+    body: JSON.stringify({
+      daily_reminder: prefs.daily_reminder,
+      weekly_meal_plan: prefs.weekly_meal_plan
+    })
   })
 }

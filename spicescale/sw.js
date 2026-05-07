@@ -68,13 +68,19 @@ self.addEventListener('push', (event) => {
     }
   }
 
+  const isWeekly = data.url && data.url.includes('meal-planner')
+  const tag = isWeekly ? 'spicescale-weekly' : 'spicescale-daily'
+
   const options = {
     body: data.body,
     icon: '/icons/icon-192.svg',
     badge: '/icons/icon-192.svg',
-    tag: 'spicescale-reminder',
+    tag,
     renotify: true,
-    data: { recipeId: data.recipeId, url: data.url || '/' }
+    data: { recipeId: data.recipeId, url: data.url || '/' },
+    actions: isWeekly
+      ? [{ action: 'plan', title: 'Plan Meals' }]
+      : [{ action: 'cook', title: "Let's Cook" }]
   }
 
   event.waitUntil(self.registration.showNotification(data.title, options))

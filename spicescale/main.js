@@ -4,7 +4,9 @@ import {
   getCurrentSubscription,
   subscribeToPush,
   unsubscribeFromPush,
-  isOptedIn
+  isOptedIn,
+  getNotificationPreferences,
+  setNotificationPreferences
 } from './pushNotifications.js'
 import {
   saveRecipeOffline,
@@ -353,49 +355,79 @@ form.addEventListener('submit', (e) => {
 async function initPushSettings() {
   if (!isPushSupported()) return
 
-  const section = document.getElementById('notification-settings')
-  const toggle = document.getElementById('push-toggle')
-  const statusEl = document.getElementById('push-status')
+  const section = document.getElementById(‘notification-settings’)
+  const toggle = document.getElementById(‘push-toggle’)
+  const statusEl = document.getElementById(‘push-status’)
+  const typesPanel = document.getElementById(‘notification-types’)
+  const dailyCheck = document.getElementById(‘notif-daily’)
+  const weeklyCheck = document.getElementById(‘notif-weekly’)
   section.hidden = false
+
+  function loadPreferences() {
+    const prefs = getNotificationPreferences()
+    dailyCheck.checked = prefs.daily_reminder
+    weeklyCheck.checked = prefs.weekly_meal_plan
+  }
 
   async function updateUI() {
     const permission = await getPermissionState()
     const subscription = await getCurrentSubscription()
 
-    if (permission === 'denied') {
+    if (permission === ‘denied’) {
       toggle.disabled = true
       toggle.checked = false
-      statusEl.textContent = 'Notifications blocked in browser settings.'
+      typesPanel.hidden = true
+      statusEl.textContent = ‘Notifications blocked in browser settings.’
       return
     }
 
-    toggle.checked = !!subscription && isOptedIn()
-    if (subscription && isOptedIn()) {
-      statusEl.textContent = 'You’ll get a reminder when saved recipes go stale.'
+    const active = !!subscription && isOptedIn()
+    toggle.checked = active
+    typesPanel.hidden = !active
+
+    if (active) {
+      loadPreferences()
+      const prefs = getNotificationPreferences()
+      const types = []
+      if (prefs.daily_reminder) types.push(‘daily reminders’)
+      if (prefs.weekly_meal_plan) types.push(‘weekly meal plans’)
+      statusEl.textContent = types.length
+        ? `Receiving: ${types.join(‘ & ‘)}`
+        : ‘Select at least one reminder type above.’
     } else {
-      statusEl.textContent = 'Enable to get weekly recipe reminders.'
+      statusEl.textContent = ‘Enable to get recipe reminders.’
     }
   }
 
-  toggle.addEventListener('change', async () => {
+  toggle.addEventListener(‘change’, async () => {
     toggle.disabled = true
-    statusEl.textContent = 'Updating...'
+    statusEl.textContent = ‘Updating...’
     try {
       if (toggle.checked) {
         const sub = await subscribeToPush()
-        if (!sub) {
-          toggle.checked = false
-        }
+        if (!sub) toggle.checked = false
       } else {
         await unsubscribeFromPush()
       }
     } catch (err) {
-      console.error('Push toggle error:', err)
+      console.error(‘Push toggle error:’, err)
       toggle.checked = false
     }
     toggle.disabled = false
     await updateUI()
   })
+
+  function onTypeChange() {
+    const prefs = {
+      daily_reminder: dailyCheck.checked,
+      weekly_meal_plan: weeklyCheck.checked
+    }
+    setNotificationPreferences(prefs)
+    updateUI()
+  }
+
+  dailyCheck.addEventListener(‘change’, onTypeChange)
+  weeklyCheck.addEventListener(‘change’, onTypeChange)
 
   await updateUI()
 }
