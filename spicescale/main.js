@@ -1,3 +1,30 @@
+import {
+  isPushSupported,
+  getPermissionState,
+  getCurrentSubscription,
+  subscribeToPush,
+  unsubscribeFromPush,
+  isOptedIn,
+  getNotificationPreferences,
+  setNotificationPreferences
+} from './pushNotifications.js'
+import {
+  saveRecipeOffline,
+  getAllRecipesOffline,
+  enqueueWrite
+} from './offlineStore.js'
+import {
+  initSyncManager,
+  onSyncStatusChange,
+  isOnline,
+  flushWriteQueue
+} from './syncManager.js'
+
+// ── Service Worker Registration ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+}
+
 // ── Pre-loaded Recipes ──
 const RECIPES = {
   'bbq-dry-rub': {
@@ -323,3 +350,177 @@ form.addEventListener('submit', (e) => {
   form.hidden = true
   successMsg.hidden = false
 })
+
+// ── Push Notification Settings ──
+async function initPushSettings() {
+  if (!isPushSupported()) return
+
+  const section = document.getElementById(‘notification-settings’)
+  const toggle = document.getElementById(‘push-toggle’)
+  const statusEl = document.getElementById(‘push-status’)
+  const typesPanel = document.getElementById(‘notification-types’)
+  const dailyCheck = document.getElementById(‘notif-daily’)
+  const weeklyCheck = document.getElementById(‘notif-weekly’)
+  section.hidden = false
+
+  function loadPreferences() {
+    const prefs = getNotificationPreferences()
+    dailyCheck.checked = prefs.daily_reminder
+    weeklyCheck.checked = prefs.weekly_meal_plan
+  }
+
+  async function updateUI() {
+    const permission = await getPermissionState()
+    const subscription = await getCurrentSubscription()
+
+    if (permission === ‘denied’) {
+      toggle.disabled = true
+      toggle.checked = false
+      typesPanel.hidden = true
+      statusEl.textContent = ‘Notifications blocked in browser settings.’
+      return
+    }
+
+    const active = !!subscription && isOptedIn()
+    toggle.checked = active
+    typesPanel.hidden = !active
+
+    if (active) {
+      loadPreferences()
+      const prefs = getNotificationPreferences()
+      const types = []
+      if (prefs.daily_reminder) types.push(‘daily reminders’)
+      if (prefs.weekly_meal_plan) types.push(‘weekly meal plans’)
+      statusEl.textContent = types.length
+        ? `Receiving: ${types.join(‘ & ‘)}`
+        : ‘Select at least one reminder type above.’
+    } else {
+      statusEl.textContent = ‘Enable to get recipe reminders.’
+    }
+  }
+
+  toggle.addEventListener(‘change’, async () => {
+    toggle.disabled = true
+    statusEl.textContent = ‘Updating...’
+    try {
+      if (toggle.checked) {
+        const sub = await subscribeToPush()
+        if (!sub) toggle.checked = false
+      } else {
+        await unsubscribeFromPush()
+      }
+    } catch (err) {
+      console.error(‘Push toggle error:’, err)
+      toggle.checked = false
+    }
+    toggle.disabled = false
+    await updateUI()
+  })
+
+  function onTypeChange() {
+    const prefs = {
+      daily_reminder: dailyCheck.checked,
+      weekly_meal_plan: weeklyCheck.checked
+    }
+    setNotificationPreferences(prefs)
+    updateUI()
+  }
+
+  dailyCheck.addEventListener(‘change’, onTypeChange)
+  weeklyCheck.addEventListener(‘change’, onTypeChange)
+
+  await updateUI()
+}
+
+initPushSettings()
+
+// ── Deep Link: ?recipe=<id> ──
+const params = new URLSearchParams(window.location.search)
+const recipeParam = params.get('recipe')
+if (recipeParam && (RECIPES[recipeParam] || recipeParam === 'custom')) {
+  setActiveRecipe(recipeParam)
+  document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' })
+}
+
+// ── Offline Status Indicator ──
+function initOfflineIndicator() {
+  const indicator = document.getElementById('offline-indicator')
+  if (!indicator) return
+
+  function updateIndicator() {
+    if (navigator.onLine) {
+      indicator.classList.remove('visible')
+      indicator.setAttribute('aria-hidden', 'true')
+    } else {
+      indicator.classList.add('visible')
+      indicator.setAttribute('aria-hidden', 'false')
+    }
+  }
+
+  window.addEventListener('online', updateIndicator)
+  window.addEventListener('offline', updateIndicator)
+  updateIndicator()
+
+  onSyncStatusChange((status) => {
+    const text = indicator.querySelector('.offline-text')
+    if (!text) return
+    switch (status) {
+      case 'syncing':
+        text.textContent = 'Syncing changes...'
+        indicator.classList.add('visible', 'syncing')
+        indicator.setAttribute('aria-hidden', 'false')
+        break
+      case 'synced':
+        text.textContent = 'All changes synced'
+        indicator.classList.add('visible', 'synced')
+        indicator.setAttribute('aria-hidden', 'false')
+        setTimeout(() => {
+          indicator.classList.remove('visible', 'synced', 'syncing')
+          indicator.setAttribute('aria-hidden', 'true')
+        }, 2000)
+        break
+      case 'error':
+        text.textContent = 'Sync failed — will retry when online'
+        indicator.classList.add('visible')
+        indicator.classList.remove('syncing', 'synced')
+        indicator.setAttribute('aria-hidden', 'false')
+        break
+      case 'offline':
+        text.textContent = 'Offline — recipes available locally'
+        indicator.classList.add('visible')
+        indicator.classList.remove('syncing', 'synced')
+        indicator.setAttribute('aria-hidden', 'false')
+        break
+      case 'online':
+        updateIndicator()
+        break
+    }
+  })
+}
+
+// ── Offline Recipe Persistence ──
+async function persistRecipesOffline() {
+  for (const [id, recipe] of Object.entries(RECIPES)) {
+    await saveRecipeOffline({ id, ...recipe })
+  }
+  const customRecipes = JSON.parse(localStorage.getItem('spicescale_custom_recipes') || '[]')
+  for (const recipe of customRecipes) {
+    await saveRecipeOffline(recipe)
+  }
+}
+
+async function saveCustomRecipeWithQueue() {
+  const recipe = {
+    id: 'custom-' + Date.now(),
+    name: customName,
+    ingredients: [...customIngredients]
+  }
+  await saveRecipeOffline(recipe)
+  await enqueueWrite({ type: 'save_recipe', data: recipe })
+  if (navigator.onLine) flushWriteQueue()
+}
+
+// ── Init Offline Support ──
+initSyncManager()
+initOfflineIndicator()
+persistRecipesOffline()

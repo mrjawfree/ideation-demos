@@ -9,11 +9,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#f97316" />
 </head>
 <body>
+  <!-- Offline Status Indicator -->
+  <div class="offline-indicator" id="offline-indicator" role="status" aria-live="polite" aria-hidden="true">
+    <span class="offline-icon" aria-hidden="true"></span>
+    <span class="offline-text">Offline — recipes available locally</span>
+  </div>
+
   <!-- Hero -->
   <header class="hero">
     <div class="container">
+      <nav class="hero-nav"><a href="/meal-planner.html" class="hero-nav-link">Weekly Meal Planner &rarr;</a></nav>
       <div class="hero-badge">Spice &amp; Sauce Batch Calculator</div>
       <h1>Scale your recipe.<br/><span class="highlight">Keep the flavor.</span></h1>
       <p class="hero-sub">Most batch calculators just multiply everything by the same number. But spices don't work that way — salt, cayenne, and soy sauce overpower at scale. <strong>SpiceScale adjusts each ingredient non-linearly</strong> so your 10x batch tastes like your 1x.</p>
@@ -119,6 +128,41 @@
           <h3>Base ingredients scale flat</h3>
           <p>Brown sugar, vinegar, and oils are forgiving — they scale linearly. We leave those alone.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notification Settings -->
+  <section class="notification-settings" id="notification-settings" hidden>
+    <div class="container">
+      <div class="notification-card">
+        <div class="notification-header">
+          <div>
+            <h3>Recipe Reminders</h3>
+            <p class="notification-desc">Get a nudge when you haven't cooked a saved recipe in a while.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="push-toggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="notification-types" id="notification-types" hidden>
+          <label class="notification-type-option">
+            <input type="checkbox" id="notif-daily" checked />
+            <span class="notif-type-label">
+              <strong>Daily cooking reminder</strong>
+              <span class="notif-type-desc">A quick nudge each evening with a recipe you haven't tried yet.</span>
+            </span>
+          </label>
+          <label class="notification-type-option">
+            <input type="checkbox" id="notif-weekly" checked />
+            <span class="notif-type-label">
+              <strong>Weekly meal plan</strong>
+              <span class="notif-type-desc">Sunday morning summary of your saved recipes for the week ahead.</span>
+            </span>
+          </label>
+        </div>
+        <p class="notification-status" id="push-status"></p>
       </div>
     </div>
   </section>
