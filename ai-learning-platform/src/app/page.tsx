@@ -66,6 +66,8 @@ function useCountUp(target: number, suffix = "", duration = 1500) {
 export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -73,13 +75,22 @@ export default function LandingPage() {
     setSubmitted(true);
   }
 
+  /* Sticky nav scroll detection */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   /* Fade-in refs for each section */
   const pullQuoteRef = useFadeIn();
   const whyRef = useFadeIn();
   const curriculumRef = useFadeIn();
   const personaRef = useFadeIn();
   const pricingRef = useFadeIn();
+  const credibilityRef = useFadeIn();
   const testimonialRef = useFadeIn();
+  const faqRef = useFadeIn();
 
   /* Counter animations */
   const stat87 = useCountUp(87, "%");
@@ -95,6 +106,58 @@ export default function LandingPage() {
 
   return (
     <>
+      {/* ─── STICKY NAV ─── */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-[#0A0A0A]/95 backdrop-blur-sm border-b border-white/5"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="mx-auto max-w-5xl px-6 flex items-center justify-between h-16">
+          <span className="font-display text-lg font-bold text-[#FAFAF5]">
+            AI Fluency Lab
+          </span>
+          <div className="hidden sm:flex items-center gap-8 text-sm text-[#FAFAF5]/60">
+            <a
+              href="#curriculum"
+              onClick={scrollTo("#curriculum")}
+              className="hover:text-[#FAFAF5] transition-colors duration-200"
+            >
+              Curriculum
+            </a>
+            <a
+              href="#how-it-works"
+              onClick={scrollTo("#how-it-works")}
+              className="hover:text-[#FAFAF5] transition-colors duration-200"
+            >
+              How It Works
+            </a>
+            <a
+              href="#pricing"
+              onClick={scrollTo("#pricing")}
+              className="hover:text-[#FAFAF5] transition-colors duration-200"
+            >
+              Pricing
+            </a>
+            <a
+              href="#faq"
+              onClick={scrollTo("#faq")}
+              className="hover:text-[#FAFAF5] transition-colors duration-200"
+            >
+              FAQ
+            </a>
+          </div>
+          <a
+            href="#signup"
+            onClick={scrollTo("#signup")}
+            className="btn-shimmer bg-gradient-to-r from-accent to-[#F97316] text-foreground px-5 py-2 text-sm font-bold uppercase tracking-wider hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer"
+          >
+            Join Waitlist
+          </a>
+        </div>
+      </nav>
+
       {/* ─── HERO ─── */}
       <section
         className="hero-grain text-background min-h-[90vh] flex items-center relative overflow-hidden"
@@ -113,7 +176,7 @@ export default function LandingPage() {
           aria-hidden="true"
         />
 
-        <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32 relative z-10">
+        <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32 pt-32 relative z-10">
           <p className="text-sm font-medium tracking-widest uppercase gradient-text mb-8">
             Early-bird cohort — 30 seats only
           </p>
@@ -195,6 +258,7 @@ export default function LandingPage() {
 
       {/* ─── WHY THIS WORKS ─── */}
       <section
+        id="how-it-works"
         className="py-20 sm:py-28 relative"
         style={{ background: "linear-gradient(180deg, #F5F5F0 0%, #EDEDEA 100%)" }}
       >
@@ -248,7 +312,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── CURRICULUM (numbered timeline) ─── */}
-      <section className="bg-background py-20 sm:py-28">
+      <section id="curriculum" className="bg-background py-20 sm:py-28">
         <div ref={curriculumRef} className="fade-in-section mx-auto max-w-3xl px-6">
           <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-[-0.02em] leading-[1.1] mb-16">
             What you&apos;ll learn
@@ -327,8 +391,75 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── CREDIBILITY ─── */}
+      <section
+        className="py-20 sm:py-28 relative"
+        style={{ background: "linear-gradient(180deg, #F5F5F0 0%, #EDEDEA 100%)" }}
+      >
+        <div ref={credibilityRef} className="fade-in-section mx-auto max-w-4xl px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-[-0.02em] leading-[1.1] mb-4">
+            Built by practitioners,<br />not academics
+          </h2>
+          <p className="text-muted text-lg max-w-prose leading-relaxed mb-12">
+            This curriculum wasn&apos;t designed in a classroom. It was built from real
+            workplace AI rollouts — the kind where people have jobs to do and
+            fifteen minutes to learn something new.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-8">
+            <div className="flex items-start gap-4">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center text-lg">
+                &#x1f3ed;
+              </div>
+              <div>
+                <p className="font-bold text-sm">Developed from real rollouts</p>
+                <p className="text-sm text-muted mt-1">
+                  Content built from actual workplace AI deployments across
+                  operations, finance, and marketing teams.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center text-lg">
+                &#x2705;
+              </div>
+              <div>
+                <p className="font-bold text-sm">Fact-checked by SMEs</p>
+                <p className="text-sm text-muted mt-1">
+                  Every module reviewed by subject matter experts for accuracy
+                  and real-world applicability.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center text-lg">
+                &#x1f3a4;
+              </div>
+              <div>
+                <p className="font-bold text-sm">Live cohort, not pre-recorded</p>
+                <p className="text-sm text-muted mt-1">
+                  Cohort-based with live Q&amp;A every week. You learn with
+                  peers, not alone in front of a screen.
+                </p>
+              </div>
+            </div>
+          </div>
+          {/* Tool badges */}
+          <div className="mt-12 flex flex-wrap items-center gap-3">
+            <span className="text-xs text-muted uppercase tracking-widest mr-2">Tools covered:</span>
+            {["ChatGPT", "Notion AI", "Copilot", "Claude", "Midjourney"].map((tool) => (
+              <span
+                key={tool}
+                className="text-xs font-medium px-3 py-1.5 border border-foreground/10 bg-background/80 rounded-sm"
+              >
+                {tool}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── PRICING ─── */}
-      <section className="bg-background py-20 sm:py-28">
+      <section id="pricing" className="bg-background py-20 sm:py-28">
         <div ref={pricingRef} className="fade-in-section mx-auto max-w-lg px-6">
           <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-[-0.02em] leading-[1.1] text-center mb-4">
             Simple pricing
@@ -377,9 +508,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── TESTIMONIAL (full-bleed blockquote) ─── */}
+      {/* ─── TESTIMONIALS (3-card grid) ─── */}
       <section
-        className="py-28 sm:py-36 relative overflow-hidden"
+        className="py-20 sm:py-28 relative overflow-hidden"
         style={{ background: "linear-gradient(180deg, #F5F5F0 0%, #EEEEE8 100%)" }}
       >
         <div
@@ -388,19 +519,46 @@ export default function LandingPage() {
           aria-hidden="true"
         />
         <div ref={testimonialRef} className="fade-in-section mx-auto max-w-4xl px-6">
-          <blockquote className="md:pl-16 relative">
-            <span className="font-display text-[8rem] leading-none text-foreground/[0.04] absolute -top-8 -left-4 md:left-0 select-none" aria-hidden="true">
-              &ldquo;
-            </span>
-            <p className="font-display text-2xl sm:text-3xl lg:text-4xl italic leading-tight font-bold relative z-10">
-              I went from asking ChatGPT trivia questions to building an
-              automated weekly report that saves me 4 hours every Friday.
-            </p>
-            <footer className="mt-8">
-              <p className="font-bold">Early pilot participant</p>
-              <p className="text-sm text-muted">Operations Manager, Fortune 500</p>
-            </footer>
-          </blockquote>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-[-0.02em] leading-[1.1] mb-12">
+            What participants say
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-6">
+            <TestimonialCard
+              name="Maria T."
+              role="Operations Manager"
+              quote="I went from asking ChatGPT trivia questions to building an automated weekly report that saves me 4 hours every Friday."
+            />
+            <TestimonialCard
+              name="David K."
+              role="SMB Founder"
+              quote="Now I can explain exactly what I need from AI tools and delegate AI-powered tasks to my team with confidence."
+            />
+            <TestimonialCard
+              name="Priya L."
+              role="L&D Specialist"
+              quote="We rolled this out to 20 people. Completion rate was 94%. That never happens with our e-learning programs."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ─── */}
+      <section id="faq" className="bg-background py-20 sm:py-28">
+        <div ref={faqRef} className="fade-in-section mx-auto max-w-3xl px-6">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-[-0.02em] leading-[1.1] mb-12">
+            Frequently asked questions
+          </h2>
+          <div className="divide-y divide-foreground/10">
+            {faqItems.map((item, i) => (
+              <FaqItem
+                key={i}
+                question={item.q}
+                answer={item.a}
+                isOpen={openFaq === i}
+                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -458,20 +616,27 @@ export default function LandingPage() {
         style={{ background: "linear-gradient(180deg, #0A0A0A 0%, #050505 100%)" }}
       >
         <div className="mx-auto max-w-4xl px-6">
-          <nav className="flex justify-center gap-8 text-sm text-background/50 mb-6">
+          <nav className="flex flex-wrap justify-center gap-8 text-sm text-background/50 mb-6">
             <a
               href="#curriculum"
               className="hover:text-background transition-colors duration-200"
-              onClick={scrollTo("section:nth-of-type(4)")}
+              onClick={scrollTo("#curriculum")}
             >
               Curriculum
             </a>
             <a
               href="#pricing"
               className="hover:text-background transition-colors duration-200"
-              onClick={scrollTo("section:nth-of-type(6)")}
+              onClick={scrollTo("#pricing")}
             >
               Pricing
+            </a>
+            <a
+              href="#faq"
+              className="hover:text-background transition-colors duration-200"
+              onClick={scrollTo("#faq")}
+            >
+              FAQ
             </a>
             <a
               href="#signup"
@@ -479,6 +644,22 @@ export default function LandingPage() {
               onClick={scrollTo("#signup")}
             >
               Sign Up
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-background transition-colors duration-200"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-background transition-colors duration-200"
+            >
+              Terms of Service
             </a>
           </nav>
           <div className="text-center text-sm">
@@ -553,3 +734,96 @@ function PersonaCard({
     </div>
   );
 }
+
+function TestimonialCard({
+  name,
+  role,
+  quote,
+}: {
+  name: string;
+  role: string;
+  quote: string;
+}) {
+  return (
+    <div className="gradient-border-hover bg-background p-6 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-200 rounded-sm">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-12 h-12 rounded-full bg-foreground/5 shrink-0" aria-hidden="true" />
+        <div>
+          <p className="font-bold text-sm">{name}</p>
+          <p className="text-xs text-muted">{role}</p>
+        </div>
+      </div>
+      <p className="text-sm leading-relaxed text-foreground/80 italic">
+        &ldquo;{quote}&rdquo;
+      </p>
+    </div>
+  );
+}
+
+function FaqItem({
+  question,
+  answer,
+  isOpen,
+  onToggle,
+}: {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="py-5">
+      <button
+        onClick={onToggle}
+        className="w-full text-left flex items-center justify-between gap-4 cursor-pointer"
+      >
+        <span className="font-bold text-base">{question}</span>
+        <span
+          className={`shrink-0 text-muted text-xl transition-transform duration-200 ${
+            isOpen ? "rotate-45" : ""
+          }`}
+        >
+          +
+        </span>
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${
+          isOpen ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
+        }`}
+      >
+        <p className="text-sm text-muted leading-relaxed">{answer}</p>
+      </div>
+    </div>
+  );
+}
+
+const faqItems = [
+  {
+    q: "Is this for total beginners or people who have already tried AI?",
+    a: "Both. We start from scratch in Week 1 but move fast. If you've dabbled with ChatGPT, you'll still learn new frameworks and workflows you haven't tried.",
+  },
+  {
+    q: "What if I miss a live session?",
+    a: "Every session is recorded and shared within 24 hours. You can catch up async and still participate in the community discussion.",
+  },
+  {
+    q: "How is this different from just using ChatGPT?",
+    a: "ChatGPT is a tool. This course teaches you when, why, and how to use it — plus five other AI tools — in the context of your actual job. Tools without method is just experimentation.",
+  },
+  {
+    q: "What tools do we actually learn in the course?",
+    a: "ChatGPT, Claude, Notion AI, Microsoft Copilot, and Midjourney. We focus on practical application, not exhaustive feature tours.",
+  },
+  {
+    q: "Do I need any technical background?",
+    a: "None. If you can use email and a spreadsheet, you have all the technical skills you need. That's the whole point.",
+  },
+  {
+    q: "What is the time commitment per week?",
+    a: "About 3 hours: a 90-minute live session plus 60–90 minutes of hands-on exercises you can do at your own pace.",
+  },
+  {
+    q: "Is there a refund policy?",
+    a: "Yes. If you attend the first two sessions and feel it's not for you, we'll refund your full payment — no questions asked.",
+  },
+];
